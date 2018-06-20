@@ -62,6 +62,6 @@ io.on('connection', (client) => {
     });
 });
 
-const port = 8000
+const port = 80
 io.listen(port);
 console.log('Listening on port ', port);
