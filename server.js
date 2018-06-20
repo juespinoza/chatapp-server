@@ -6,7 +6,6 @@ const io = require('socket.io')(server)
 let usernames = [];
 let roomHistory = [];
 const historyMax = 10;
-let historyInit = 0;
 
 io.on('connection', (client) => {
     console.log('Socket connected...');
@@ -46,6 +45,9 @@ io.on('connection', (client) => {
     // send message event listener
     client.on('send message', function(message, user, callback){
         let messageData = { msg: message, user: user || client.username }
+        if(roomHistory.length == historyMax){
+            roomHistory.shift();
+        }
         roomHistory.push(messageData);
         io.emit('new message received', roomHistory);
         callback(true, roomHistory, usernames);
@@ -60,5 +62,6 @@ io.on('connection', (client) => {
     });
 });
 
-io.listen(process.env.PORT);
-console.log('Listening on port ', process.env.PORT);
+const port = 8000
+io.listen(port);
+console.log('Listening on port ', port);
